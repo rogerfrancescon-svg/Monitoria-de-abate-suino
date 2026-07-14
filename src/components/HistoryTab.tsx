@@ -206,8 +206,8 @@ export function HistoryTab() {
                     {/* Batch Info */}
                     <div className="space-y-2 w-full md:w-auto">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-bold text-white uppercase break-words">{record.batch.farm}</span>
-                        <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono font-bold">Lote: {record.batch.batchId}</span>
+                        <span className="text-sm font-bold text-white uppercase break-words">{record.batch.farm || 'Sem nome'}</span>
+                        <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono font-bold">Lote: {record.batch.batchId || 'N/A'}</span>
                         {currentBatch?.id === record.batch.id && (
                           <span className="text-[9px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-md font-black uppercase tracking-wider">ATIVO</span>
                         )}

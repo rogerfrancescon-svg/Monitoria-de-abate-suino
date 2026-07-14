@@ -45,7 +45,7 @@ export default function App() {
           {currentBatch && (
             <div className="hidden sm:block text-right">
               <div className="text-[10px] text-slate-500 uppercase tracking-widest mb-0.5">Lote Atual</div>
-              <div className="text-sm font-mono text-sky-400 font-bold">{currentBatch.farm.substring(0,3).toUpperCase()}-{currentBatch.batchId}</div>
+              <div className="text-sm font-mono text-sky-400 font-bold">{(currentBatch.farm || 'GRN').substring(0,3).toUpperCase()}-{currentBatch.batchId || '000'}</div>
             </div>
           )}
         </div>

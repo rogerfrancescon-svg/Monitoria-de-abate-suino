@@ -54,7 +54,7 @@ export function DashboardTab() {
 
       summaries.push({
         id: batch.id,
-        name: `${batch.farm.substring(0, 3).toUpperCase()}-${batch.batchId}`,
+        name: `${(batch.farm || 'GRN').substring(0, 3).toUpperCase()}-${batch.batchId || '000'}`,
         date: batch.date,
         avgScore: Number(avgScore.toFixed(2)),
         prevPneumonia: Number(prevPneumonia.toFixed(1)),
