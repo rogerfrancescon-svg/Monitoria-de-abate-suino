@@ -7,23 +7,23 @@ import { calculateAnimalStats, cn, generateId } from '../utils';
 import { ChevronLeft, ChevronRight, RotateCcw, Check, Activity } from 'lucide-react';
 
 const LOBES = [
+  { id: 'leftCranial', label: 'Cranial Esq.', weight: 10 },
+  { id: 'leftMiddle', label: 'Médio Esq.', weight: 10 },
+  { id: 'leftCaudal', label: 'Caudal Esq.', weight: 25 },
   { id: 'rightCranial', label: 'Cranial Dir.', weight: 10 },
   { id: 'rightMiddle', label: 'Médio Dir.', weight: 10 },
   { id: 'rightCaudal', label: 'Caudal Dir.', weight: 25 },
   { id: 'accessory', label: 'Acessório', weight: 10 },
-  { id: 'leftCranial', label: 'Cranial Esq.', weight: 10 },
-  { id: 'leftMiddle', label: 'Médio Esq.', weight: 10 },
-  { id: 'leftCaudal', label: 'Caudal Esq.', weight: 25 },
 ] as const;
 
 const FIELD_KEYS: (keyof AnimalEvaluation)[] = [
+  'leftCranial',
+  'leftMiddle',
+  'leftCaudal',
   'rightCranial',
   'rightMiddle',
   'rightCaudal',
   'accessory',
-  'leftCranial',
-  'leftMiddle',
-  'leftCaudal',
   'spes'
 ];
 
@@ -340,14 +340,14 @@ export function CollectionTab() {
         <div className="flex-1 overflow-y-auto p-2 md:p-8 pb-20 md:pb-8">
           <div className="md:grid md:grid-cols-2 gap-x-12">
             <div className="space-y-0 md:space-y-2">
-              {LOBES.slice(0, 4).map((lobe) => (
+              {LOBES.slice(0, 3).map((lobe) => (
                 <div key={lobe.id}>
                   <ScoreButtonGroup label={lobe.label} valueKey={lobe.id as keyof AnimalEvaluation} />
                 </div>
               ))}
             </div>
             <div className="space-y-0 md:space-y-2">
-              {LOBES.slice(4, 7).map((lobe) => (
+              {LOBES.slice(3, 7).map((lobe) => (
                 <div key={lobe.id}>
                   <ScoreButtonGroup label={lobe.label} valueKey={lobe.id as keyof AnimalEvaluation} />
                 </div>
