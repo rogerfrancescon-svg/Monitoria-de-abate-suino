@@ -33,12 +33,37 @@
       }
     </style>
     <script>
+      function clearCachesAndReload() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+              registration.unregister();
+            }
+          });
+        }
+        if ('caches' in window) {
+          caches.keys().then(function(names) {
+            for (let name of names)
+              caches.delete(name);
+          });
+        }
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 500);
+      }
+
       window.addEventListener('error', function(e) {
         if (e.target && e.target.nodeName === 'SCRIPT') {
           var el = document.getElementById('fallback-error');
           var root = document.getElementById('root');
           if (el) el.style.display = 'block';
           if (root) root.style.display = 'none';
+          
+          // Automatically try to clear caches once
+          if (!sessionStorage.getItem('attempted_sw_clear')) {
+            sessionStorage.setItem('attempted_sw_clear', 'true');
+            clearCachesAndReload();
+          }
         }
       }, true);
     </script>
@@ -46,12 +71,11 @@
   <body>
     <div id="fallback-error">
       <h2>Erro ao carregar o aplicativo</h2>
-      <p>Os arquivos do aplicativo não puderam ser carregados. Isso geralmente acontece devido a um cache desatualizado no navegador após uma atualização.</p>
-      <p>Por favor, recarregue a página ignorando o cache (Force Refresh).</p>
-      <button class="reload-btn" onclick="window.location.reload(true)">Recarregar Página</button>
+      <p>Tentando recuperar automaticamente...</p>
+      <p>Se esta tela permanecer, por favor clique no botão abaixo para forçar a limpeza do cache.</p>
+      <button class="reload-btn" onclick="clearCachesAndReload()">Limpar Cache e Recarregar</button>
     </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

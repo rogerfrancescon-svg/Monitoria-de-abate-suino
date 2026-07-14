@@ -20,36 +20,35 @@ async function startServer() {
       }
 
       const ai = new GoogleGenAI({ apiKey });
-
       const prompt = `Analise os seguintes dados de uma avaliação de abate de suínos (monitoria de pneumonia e lesões pleurais) e forneça sugestões de ações corretivas e preventivas.
-      
-Dados do Lote:
-- Granja: ${batchData.farm}
-- Lote: ${batchData.batchId}
-- Frigorífico: ${batchData.abattoir}
-- Total Avaliados: ${evaluations.length} / ${batchData.totalAnimals}
-- Data: ${new Date(batchData.date).toLocaleDateString('pt-BR')}
 
-Métricas:
-- Índice de Pneumonia (IP): ${batchData.avgIp}
-- Área Afetada Média: ${batchData.avgAreaAffected}%
-- Índice Médio (MADEC): ${batchData.avgScore}
-- SPES Médio: ${batchData.avgSpes}
-- APP Index (APPI): ${batchData.avgAppi}
-- Prevalência de Pneumonia: ${batchData.prevPneumonia}%
-- Prevalência de Cicatrizes: ${batchData.prevScar}%
-- Prevalência de Pleurisia: ${batchData.prevPleurisy}%
+      Dados do Lote:
+      - Granja: ${batchData.farm}
+      - Lote: ${batchData.batchId}
+      - Frigorífico: ${batchData.abattoir}
+      - Total Avaliados: ${evaluations.length} / ${batchData.totalAnimals}
+      - Data: ${new Date(batchData.date).toLocaleDateString('pt-BR')}
 
-Impacto Econômico:
-- Perda de Ganho de Peso Diário (GPD): -${batchData.lossGramsPerDay} g/dia
-- Piora na Conversão Alimentar (CA): +${batchData.lossFcrPercent}%
+      Métricas:
+      - Índice de Pneumonia (IP): ${batchData.avgIp}
+      - Área Afetada Média: ${batchData.avgAreaAffected}%
+      - Índice Médio (MADEC): ${batchData.avgScore}
+      - SPES Médio: ${batchData.avgSpes}
+      - APP Index (APPI): ${batchData.avgAppi}
+      - Prevalência de Pneumonia: ${batchData.prevPneumonia}%
+      - Prevalência de Cicatrizes: ${batchData.prevScar}%
+      - Prevalência de Pleurisia: ${batchData.prevPleurisy}%
 
-Por favor, retorne um texto formatado em Markdown com:
-1. Uma breve interpretação geral do quadro respiratório e seu impacto econômico no lote.
-2. 3 a 5 pontos com possíveis causas para os índices observados (baseados nas prevalências de pneumonia, pleurisia e cicatrizes).
-3. 3 a 5 ações práticas (corretivas/preventivas) focadas em manejo, vacinação, medicação ou ambiência para a granja ${batchData.farm}.
+      Impacto Econômico:
+      - Perda de Ganho de Peso Diário (GPD): -${batchData.lossGramsPerDay} g/dia
+      - Piora na Conversão Alimentar (CA): +${batchData.lossFcrPercent}%
 
-Responda em português (pt-BR) de forma profissional, voltado para veterinários e produtores de suínos.`;
+      Por favor, retorne um texto formatado em Markdown com:
+      1. Uma breve interpretação geral do quadro respiratório e seu impacto econômico no lote.
+      2. 3 a 5 pontos com possíveis causas para os índices observados (baseados nas prevalências de pneumonia, pleurisia e cicatrizes).
+      3. 3 a 5 ações práticas (corretivas/preventivas) focadas em manejo, vacinação, medicação ou ambiência para a granja ${batchData.farm}.
+
+      Responda em português (pt-BR) de forma profissional, voltado para veterinários e produtores de suínos.`;
 
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
@@ -61,6 +60,35 @@ Responda em português (pt-BR) de forma profissional, voltado para veterinários
       console.error("Erro na análise do Gemini:", error);
       res.status(500).json({ error: error.message || "Erro interno no servidor" });
     }
+  });
+
+  // KILL SWITCH for Service Worker in Dev Mode
+  app.get('/sw.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.send(`
+self.addEventListener('install', (e) => { self.skipWaiting(); });
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((cacheNames) => Promise.all(cacheNames.map((c) => caches.delete(c))))
+    .then(() => self.clients.claim())
+    .then(() => self.registration.unregister())
+  );
+});
+self.addEventListener('fetch', (e) => {
+  e.respondWith(fetch(e.request).catch(() => new Response('Failed')));
+});
+    `);
+  });
+
+  app.get('/registerSW.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.send(`
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) { registration.unregister(); }
+  });
+}
+    `);
   });
 
   // Vite middleware for development

@@ -5,8 +5,8 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ mode }) => {
-  // Use repository name for GitHub Pages if available, otherwise relative paths
-  const base = process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : './';
+  const isDev = mode === 'development' || !process.env.NODE_ENV || process.env.NODE_ENV !== 'production';
+  const base = process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : (isDev ? '/' : './');
 
   return {
     base,
