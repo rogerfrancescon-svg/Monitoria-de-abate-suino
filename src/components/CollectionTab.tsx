@@ -325,17 +325,6 @@ export function CollectionTab() {
 
       {/* Center Panel: Lobos Evaluation */}
       <section className="flex-1 bg-slate-950 md:bg-slate-900 md:rounded-2xl md:border border-slate-800 flex flex-col relative overflow-hidden md:shadow-lg">
-        {/* Desktop Header */}
-        <div className="hidden md:flex items-center justify-between p-8 pb-0 shrink-0">
-          <h2 className="text-xl font-bold text-white flex items-center gap-3">
-            <span className="w-2 h-8 bg-sky-500 rounded-full"></span>
-            Avaliação Pulmonar
-          </h2>
-          <div className="flex gap-2">
-            <span className="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-[10px] text-slate-400 uppercase font-bold">Madec Adaptado</span>
-          </div>
-        </div>
-
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-2 md:p-8 pb-20 md:pb-8">
           <div className="md:grid md:grid-cols-2 gap-x-12">
