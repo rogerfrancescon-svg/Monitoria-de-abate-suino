@@ -4,8 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Google AI Studio App</title>
+    <style>
+      #fallback-error {
+        display: none;
+        padding: 40px 20px;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #020617;
+        height: 100vh;
+        box-sizing: border-box;
+        text-align: center;
+      }
+      #fallback-error p {
+        color: #94a3b8;
+        max-width: 500px;
+        margin: 16px auto;
+        line-height: 1.5;
+      }
+      .reload-btn {
+        background: #0284c7;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+    </style>
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.target && e.target.nodeName === 'SCRIPT') {
+          var el = document.getElementById('fallback-error');
+          var root = document.getElementById('root');
+          if (el) el.style.display = 'block';
+          if (root) root.style.display = 'none';
+        }
+      }, true);
+    </script>
   </head>
   <body>
+    <div id="fallback-error">
+      <h2>Erro ao carregar o aplicativo</h2>
+      <p>Os arquivos do aplicativo não puderam ser carregados. Isso geralmente acontece devido a um cache desatualizado no navegador após uma atualização.</p>
+      <p>Por favor, recarregue a página ignorando o cache (Force Refresh).</p>
+      <button class="reload-btn" onclick="window.location.reload(true)">Recarregar Página</button>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
