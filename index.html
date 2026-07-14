@@ -3,78 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-    <style>
-      #fallback-error {
-        display: none;
-        padding: 40px 20px;
-        color: #f8fafc;
-        font-family: system-ui, -apple-system, sans-serif;
-        background: #020617;
-        height: 100vh;
-        box-sizing: border-box;
-        text-align: center;
-      }
-      #fallback-error p {
-        color: #94a3b8;
-        max-width: 500px;
-        margin: 16px auto;
-        line-height: 1.5;
-      }
-      .reload-btn {
-        background: #0284c7;
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 20px;
-      }
-    </style>
-    <script>
-      function clearCachesAndReload() {
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            for(let registration of registrations) {
-              registration.unregister();
-            }
-          });
-        }
-        if ('caches' in window) {
-          caches.keys().then(function(names) {
-            for (let name of names)
-              caches.delete(name);
-          });
-        }
-        setTimeout(() => {
-          window.location.reload(true);
-        }, 500);
-      }
-
-      window.addEventListener('error', function(e) {
-        if (e.target && e.target.nodeName === 'SCRIPT') {
-          var el = document.getElementById('fallback-error');
-          var root = document.getElementById('root');
-          if (el) el.style.display = 'block';
-          if (root) root.style.display = 'none';
-          
-          // Automatically try to clear caches once
-          if (!sessionStorage.getItem('attempted_sw_clear')) {
-            sessionStorage.setItem('attempted_sw_clear', 'true');
-            clearCachesAndReload();
-          }
-        }
-      }, true);
-    </script>
+    <title>Monitoria de Abate</title>
   </head>
   <body>
-    <div id="fallback-error">
-      <h2>Erro ao carregar o aplicativo</h2>
-      <p>Tentando recuperar automaticamente...</p>
-      <p>Se esta tela permanecer, por favor clique no botão abaixo para forçar a limpeza do cache.</p>
-      <button class="reload-btn" onclick="clearCachesAndReload()">Limpar Cache e Recarregar</button>
-    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -19,6 +19,5 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Do nothing, just pass through to network
-  e.respondWith(fetch(e.request).catch(() => new Response('Failed')));
+  // Pass through
 });
