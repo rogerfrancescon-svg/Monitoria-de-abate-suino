@@ -4,9 +4,12 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  // Use repository name for GitHub Pages if available, otherwise relative paths
+  const base = process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : './';
+
   return {
-    base: './',
+    base,
     plugins: [
       react(), 
       tailwindcss(),
@@ -17,7 +20,7 @@ export default defineConfig(() => {
           name: 'Monitoria de Abate',
           short_name: 'Monitoria',
           description: 'Inspeção de pulmões de suínos',
-          theme_color: '#0f172a', // slate-950
+          theme_color: '#0f172a',
           background_color: '#0f172a',
           display: 'standalone',
           icons: [
@@ -48,10 +51,7 @@ export default defineConfig(() => {
     },
 
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };
