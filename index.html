@@ -4,8 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Monitoria de Abate</title>
+    <style>
+      #fallback-error {
+        display: none;
+        padding: 40px 20px;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #020617;
+        height: 100vh;
+        box-sizing: border-box;
+        text-align: center;
+      }
+      #fallback-error p {
+        color: #94a3b8;
+        max-width: 500px;
+        margin: 16px auto;
+        line-height: 1.5;
+        word-break: break-all;
+      }
+    </style>
+    <script>
+      window.addEventListener('error', function(e) {
+        var el = document.getElementById('fallback-error');
+        var root = document.getElementById('root');
+        var msg = document.getElementById('error-msg');
+        if (el) {
+          el.style.display = 'block';
+          if (msg) msg.textContent = e.message || 'Unknown error: ' + (e.error ? e.error.stack : '');
+        }
+        if (root) root.style.display = 'none';
+      }, true);
+    </script>
   </head>
   <body>
+    <div id="fallback-error">
+      <h2>Erro ao carregar o aplicativo</h2>
+      <p id="error-msg">Os arquivos do aplicativo não puderam ser carregados.</p>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
