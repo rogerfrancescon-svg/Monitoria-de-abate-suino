@@ -131,7 +131,28 @@ export function CollectionTab() {
   });
 
   const updateValue = (key: keyof AnimalEvaluation, value: string | number | boolean) => {
-    setEvaluation(prev => ({ ...prev, [key]: value }));
+    const updatedEval = { ...evaluation, [key]: value };
+    if (currentBatch) {
+      const toSave: AnimalEvaluation = {
+        id: updatedEval.id || generateId(),
+        batchId: currentBatch.id,
+        animalIndex: currentAnimalIndex,
+        rightCranial: updatedEval.rightCranial || 0,
+        rightMiddle: updatedEval.rightMiddle || 0,
+        rightCaudal: updatedEval.rightCaudal || 0,
+        accessory: updatedEval.accessory || 0,
+        leftCranial: updatedEval.leftCranial || 0,
+        leftMiddle: updatedEval.leftMiddle || 0,
+        leftCaudal: updatedEval.leftCaudal || 0,
+        spes: updatedEval.spes || 0,
+        scarring: updatedEval.scarring || false,
+        pleurisy: updatedEval.pleurisy || false,
+      };
+      setEvaluation(toSave);
+      db.evaluations.put(toSave).catch(console.error);
+    } else {
+      setEvaluation(updatedEval);
+    }
     const index = FIELD_KEYS.indexOf(key);
     if (index !== -1 && index < FIELD_KEYS.length - 1) {
       setActiveFieldIndex(index + 1);

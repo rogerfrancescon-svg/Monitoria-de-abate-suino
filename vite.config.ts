@@ -4,10 +4,8 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => {
-  const base = process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : '/';
-
   return {
-    base,
+    base: './', // Using relative paths ensures it works on GitHub Pages regardless of repo name
     plugins: [
       react(), 
       tailwindcss(),
@@ -17,7 +15,6 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, '.'),
       },
     },
-
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
